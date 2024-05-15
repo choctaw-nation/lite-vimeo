@@ -44,12 +44,6 @@ class LiteVimeo extends HTMLElement {
 	hash = undefined;
 
 	/**
-	 * The title of the video
-	 * @type {string}
-	 */
-	videoTitle = 'Video';
-
-	/**
 	 * Whether the Vimeo assets have been preconnected
 	 *
 	 * @type {boolean}
