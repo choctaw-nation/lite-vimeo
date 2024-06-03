@@ -219,7 +219,7 @@ class LiteVimeo extends HTMLElement {
           aspect-ratio:16 / 9;
         }
 
-        #frame, #fallbackPlaceholder, iframe {
+        #frame, #fallbackPlaceholder, iframe, #custom-placeholder {
           position: absolute;
           height:100%;
           width:100%;
@@ -228,7 +228,7 @@ class LiteVimeo extends HTMLElement {
         #frame {
           cursor: pointer;
         }
-		#fallbackPlaceholder {
+		#fallbackPlaceholder, #custom-placeholder {
 			object-fit: cover;
 		}
 
@@ -299,7 +299,7 @@ class LiteVimeo extends HTMLElement {
 		const picture = `<div id="frame"><picture>
         ${
 			this.hasCustomPlaceholder
-				? `<img id="fallbackPlaceholder"
+				? `<img id="custom-placeholder"
 				src="${this.customPlaceholder}"
 				decoding="async"
 				loading="lazy" />`
@@ -391,7 +391,7 @@ class LiteVimeo extends HTMLElement {
 	 * @returns {string} the iframe parameters
 	 */
 	getIFrameParams() {
-		return `hd=1&autohide=1&loop=1${this.enableTracking ? '&dnt=1' : ''}${this.autoPlay ? '&autoplay=1&muted=1' : ''}&#t=${this.videoStartAt}`;
+		return `hd=1&autohide=1&loop=1&autoplay=1${this.enableTracking ? '' : '&dnt=1'}${this.autoPlay ? '&muted=1' : ''}&#t=${this.videoStartAt}`;
 	}
 
 	/**
