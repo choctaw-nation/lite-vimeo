@@ -52,6 +52,7 @@ flexibility.
 | `start`             | Set the point at which the video should start, in seconds                   | `0`      |
 | `unlisted`          | An attribute flag whose existence declares the videoid as unlisted          |          |
 | `customPlaceholder` | A valid url to load a custom placeholder image                              | `string` |
+| `enabletracking`    | An opt-in attribute flag to allow Vimeo's tracking                          |
 
 ---
 

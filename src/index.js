@@ -35,7 +35,7 @@ class LiteVimeo extends HTMLElement {
 	 * @type {HTMLButtonElement}
 	 */
 	domRefPlayButton;
-	
+
 	/**
 	 * The private hash for unlisted videos
 	 *
@@ -69,6 +69,10 @@ class LiteVimeo extends HTMLElement {
 
 	get isUnlisted() {
 		return this.hasAttribute('unlisted');
+	}
+
+	get enableTracking() {
+		return this.hasAttribute('enabletracking');
 	}
 
 	get hasCustomPlaceholder() {
@@ -122,7 +126,7 @@ class LiteVimeo extends HTMLElement {
 
 	/**
 	 * Set the title of the video
-	 * 
+	 *
 	 * @param {string} title the title of the video
 	 */
 	set videoTitle(title) {
@@ -139,8 +143,7 @@ class LiteVimeo extends HTMLElement {
 
 	/**
 	 * Set the start time of the video
-	 * @param {string} time
-	 * 
+	 * @param {string} time the start time of the video
 	 */
 	set videoStartAt(time) {
 		this.setAttribute('start', time);
@@ -311,7 +314,7 @@ class LiteVimeo extends HTMLElement {
 			 loading="lazy" />
 	  `
 		}
-		'</picture><button class="lvo-playbtn"></button>'
+		</picture><button class="lvo-playbtn"></button>
       </div>`;
 		return picture;
 	}
@@ -388,7 +391,7 @@ class LiteVimeo extends HTMLElement {
 	 * @returns {string} the iframe parameters
 	 */
 	getIFrameParams() {
-		return `dnt=1&hd=1&autohide=1&loop=1&autoplay=1${this.autoPlay ? '&muted=1' : ''}&#t=${this.videoStartAt}`;
+		return `hd=1&autohide=1&loop=1${this.enableTracking ? '&dnt=1' : ''}${this.autoPlay ? '&autoplay=1&muted=1' : ''}&#t=${this.videoStartAt}`;
 	}
 
 	/**
