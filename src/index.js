@@ -96,6 +96,10 @@ class LiteVimeo extends HTMLElement {
 		return videoId;
 	}
 
+	get loop() {
+		return this.hasAttribute('loop');
+	}
+
 	/**
 	 * Set the video ID
 	 * @param {string} id
@@ -138,7 +142,7 @@ class LiteVimeo extends HTMLElement {
 	 * @returns {string} the start time or "0s"
 	 */
 	get videoStartAt() {
-		return this.getAttribute('start') || '0s';
+		return this.getAttribute('start');
 	}
 
 	/**
@@ -391,7 +395,7 @@ class LiteVimeo extends HTMLElement {
 	 * @returns {string} the iframe parameters
 	 */
 	getIFrameParams() {
-		return `hd=1&autohide=1&loop=1&autoplay=1${this.enableTracking ? '' : '&dnt=1'}${this.autoPlay ? '&muted=1' : ''}&#t=${this.videoStartAt}`;
+		return `hd=1&autohide=1&autoplay=1${this.loop ? '&loop=1' : ''}${this.enableTracking ? '' : '&dnt=1'}${this.autoPlay ? '&muted=1' : ''}${this.videoStartAt ? `&#t=${this.videoStartAt}` : ''}`;
 	}
 
 	/**

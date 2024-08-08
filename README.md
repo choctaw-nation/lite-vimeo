@@ -53,6 +53,18 @@ flexibility.
 | `unlisted`          | An attribute flag whose existence declares the videoid as unlisted          |          |
 | `customPlaceholder` | A valid url to load a custom placeholder image                              | `string` |
 | `enabletracking`    | An opt-in attribute flag to allow Vimeo's tracking                          |
+| `loop`              | If exists, loop the video                                                   |
+
+---
+
+## Changelog
+
+### v1.1.0
+
+-   Init Changelog
+-   Add new param: `loop` to enable video looping (was previously enabled by default).
+-   Updated `videoStartAt` to only render param if exists
+-   Updated autoplay param to always be set to true, but if user adds `autoplay` to the web component, it controls whether the video auto plays _and_ runs muted.
 
 ---
 
