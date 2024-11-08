@@ -9,7 +9,7 @@
 		"url": "git@github.com:choctaw-nation/lite-vimeo.git"
 	},
 	"license": "MIT",
-	"version": "1.1.0",
+	"version": "1.1.1",
 	"main": "dist/lite-vimeo.js",
 	"targets": {
 		"main": {
@@ -28,7 +28,7 @@
 		"vimeo"
 	],
 	"devDependencies": {
-		"@wordpress/prettier-config": "^4.5.0",
+		"@wordpress/prettier-config": "^4.11.0",
 		"parcel": "^2.12.0"
 	}
 }

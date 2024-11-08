@@ -59,6 +59,12 @@ flexibility.
 
 ## Changelog
 
+### v1.1.1
+
+-   Handle the Shadow Root & web-component lifecycle methods better
+-   Update query params to add `enablejsapi=1`
+-   Bump packages
+
 ### v1.1.0
 
 -   Init Changelog

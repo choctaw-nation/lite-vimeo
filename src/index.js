@@ -60,6 +60,9 @@ class LiteVimeo extends HTMLElement {
 	}
 
 	connectedCallback() {
+		if (!this.shadowRoot) {
+			this.shadowRoot = this.attachShadow({ mode: 'open' });
+		}
 		this.addEventListener('pointerover', LiteVimeo.warmConnections, {
 			once: true,
 		});
@@ -199,15 +202,19 @@ class LiteVimeo extends HTMLElement {
 	 * Define our shadowDOM for the component
 	 */
 	setupDom() {
-		const shadowDom = this.attachShadow({ mode: 'open' });
-		shadowDom.innerHTML = this.addStyles() + this.addPictureElement();
-		this.domRefFrame = shadowDom.querySelector('#frame');
+		if (!this.shadowRoot) {
+			this.shadowRoot = this.attachShadow({ mode: 'open' });
+		} else {
+			this.shadowRoot.innerHTML = '';
+		}
+		this.shadowRoot.innerHTML = this.addStyles() + this.addPictureElement();
+		this.domRefFrame = this.shadowRoot.querySelector('#frame');
 		this.domRefImg = {
-			fallback: shadowDom.querySelector('#fallbackPlaceholder'),
-			webp: shadowDom.querySelector('#webpPlaceholder'),
-			jpeg: shadowDom.querySelector('#jpegPlaceholder'),
+			fallback: this.shadowRoot.querySelector('#fallbackPlaceholder'),
+			webp: this.shadowRoot.querySelector('#webpPlaceholder'),
+			jpeg: this.shadowRoot.querySelector('#jpegPlaceholder'),
 		};
-		this.domRefPlayButton = shadowDom.querySelector('.lvo-playbtn');
+		this.domRefPlayButton = this.shadowRoot.querySelector('.lvo-playbtn');
 	}
 
 	/** Add CSS to ShadowDOM Element
@@ -241,7 +248,11 @@ class LiteVimeo extends HTMLElement {
 		display: block;
 		position: absolute;
 		top: 0;
-		${this.hasCustomPlaceholder ? '' : 'background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAADGCAYAAAAT+OqFAAAAdklEQVQoz42QQQ7AIAgEF/T/D+kbq/RWAlnQyyazA4aoAB4FsBSA/bFjuF1EOL7VbrIrBuusmrt4ZZORfb6ehbWdnRHEIiITaEUKa5EJqUakRSaEYBJSCY2dEstQY7AuxahwXFrvZmWl2rh4JZ07z9dLtesfNj5q0FU3A5ObbwAAAABJRU5ErkJggg==);'}
+		${
+			this.hasCustomPlaceholder
+				? ''
+				: 'background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAADGCAYAAAAT+OqFAAAAdklEQVQoz42QQQ7AIAgEF/T/D+kbq/RWAlnQyyazA4aoAB4FsBSA/bFjuF1EOL7VbrIrBuusmrt4ZZORfb6ehbWdnRHEIiITaEUKa5EJqUakRSaEYBJSCY2dEstQY7AuxahwXFrvZmWl2rh4JZ07z9dLtesfNj5q0FU3A5ObbwAAAABJRU5ErkJggg==);'
+		}
 		background-position: top;
 		height: 60px;
 		padding-bottom: 50px;
@@ -376,7 +387,8 @@ class LiteVimeo extends HTMLElement {
 				`/video/${this.videoId}` +
 				(this.isUnlisted
 					? `?h=${this.hash}&${queryParams}`
-					: `?${queryParams}`);
+					: `?${queryParams}`) +
+				`enablejsapi=1`;
 
 			const srcUrl = new URL(url, 'https://player.vimeo.com/');
 
@@ -395,7 +407,11 @@ class LiteVimeo extends HTMLElement {
 	 * @returns {string} the iframe parameters
 	 */
 	getIFrameParams() {
-		return `hd=1&autohide=1&autoplay=1${this.loop ? '&loop=1' : ''}${this.enableTracking ? '' : '&dnt=1'}${this.autoPlay ? '&muted=1' : ''}${this.videoStartAt ? `&#t=${this.videoStartAt}` : ''}`;
+		return `hd=1&autohide=1&autoplay=1${this.loop ? '&loop=1' : ''}${
+			this.enableTracking ? '' : '&dnt=1'
+		}${this.autoPlay ? '&muted=1' : ''}${
+			this.videoStartAt ? `&#t=${this.videoStartAt}` : ''
+		}`;
 	}
 
 	/**
