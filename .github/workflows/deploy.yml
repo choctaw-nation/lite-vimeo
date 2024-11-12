@@ -9,11 +9,21 @@ jobs:
         steps:
             - name: checkout
               uses: actions/checkout@v4
+
             - name: Setup Node
               uses: actions/setup-node@v4
               with:
                   node-version: '20'
                   registry-url: 'https://registry.npmjs.org'
+
+            - name: Cache npm dependencies
+              id: npm-cache
+              uses: actions/cache@v4
+              with:
+                  path: node_modules
+                  key: ${{ runner.os }}-node_modules-${{ hashFiles('**/package-lock.json') }}
+                  restore-keys: |
+                      ${{ runner.os }}-node_modules-
 
             - name: Install Dependencies
               run: npm ci
@@ -21,8 +31,35 @@ jobs:
             - name: Build
               run: npm run build
 
+            - name: Upload dist folder
+              uses: actions/upload-artifact@v4
+              with:
+                  name: dist
+                  path: /dist
+
             - name: Publish to NPM
               uses: JS-DevTools/npm-publish@v3
               with:
                   token: ${{ secrets.NPM_TOKEN }}
                   access: public
+
+            - name: Get version
+              id: version
+              run: |
+                  echo "VERSION=$(node -p \"require('./package.json').version\")" >> "$GITHUB_ENV"
+              shell: bash
+
+            - name: Download dist artifact
+              uses: actions/download-artifact@v4
+              with:
+                  name: dist
+                  path: ./dist
+
+            - name: Create Release
+              uses: softprops/action-gh-release@v2
+              with:
+                  files: ./dist/**
+                  token: ${{ secrets.GITHUB_TOKEN }}
+                  tag_name: v${{ env.VERSION }}
+                  name: v${{ env.VERSION }}
+                  generate_release_notes: true

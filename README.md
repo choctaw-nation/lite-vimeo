@@ -59,10 +59,14 @@ flexibility.
 
 ## Changelog
 
+### v1.2.0
+
+-   Fix a styling issue and autoplay issue
+-   Refactor into multiple classes for clearer split of responsibilities
+
 ### v1.1.1
 
 -   Handle the Shadow Root & web-component lifecycle methods better
--   Update query params to add `enablejsapi=1`
 -   Bump packages
 
 ### v1.1.0

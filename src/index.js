@@ -1,201 +1,15 @@
+import LVStylesHandler from './LVStylesHandler';
+
 /**
- * An updated version of the `lite-vimeo` web component
+ * Final Class
+ * Sets up the component
  *
  * @link https://github.com/slightlyoff/lite-vimeo
  */
-class LiteVimeo extends HTMLElement {
-	/**
-	 * The Shadow DOM Root
-	 *
-	 * @type {ShadowRoot}
-	 */
-	shadowRoot;
-
-	/**
-	 * Whether the iframe has been loaded
-	 * @type {boolean}
-	 */
-	iframeLoaded = false;
-
-	/**
-	 * The `div#frame` of the shadowDOM that the iframe will be inserted into
-	 *
-	 * @type {HTMLDivElement}
-	 */
-	domRefFrame;
-
-	/**
-	 * The `img` elements of the shadowDOM that will be used as placeholders
-	 * @type {{fallback: HTMLImageElement, webp: HTMLSourceElement, jpeg: HTMLSourceElement}}
-	 */
-	domRefImg;
-
-	/**
-	 * The play button element
-	 * @type {HTMLButtonElement}
-	 */
-	domRefPlayButton;
-
-	/**
-	 * The private hash for unlisted videos
-	 *
-	 * @type {string|undefined}
-	 */
-	hash = undefined;
-
-	/**
-	 * Whether the Vimeo assets have been preconnected
-	 *
-	 * @type {boolean}
-	 */
-	static preconnected = false;
-
+class LiteVimeo extends LVStylesHandler {
 	constructor() {
 		super();
 		this.setupDom();
-	}
-
-	static get observedAttributes() {
-		return ['videoid'];
-	}
-
-	connectedCallback() {
-		if (!this.shadowRoot) {
-			this.shadowRoot = this.attachShadow({ mode: 'open' });
-		}
-		this.addEventListener('pointerover', LiteVimeo.warmConnections, {
-			once: true,
-		});
-
-		this.addEventListener('click', () => this.addIframe());
-	}
-
-	get isUnlisted() {
-		return this.hasAttribute('unlisted');
-	}
-
-	get enableTracking() {
-		return this.hasAttribute('enabletracking');
-	}
-
-	get hasCustomPlaceholder() {
-		return this.hasAttribute('customplaceholder');
-	}
-
-	get customPlaceholder() {
-		return this.getAttribute('customplaceholder') || '';
-	}
-
-	get videoId() {
-		const videoId = this.getAttribute('videoid');
-		if (!videoId) {
-			return '';
-		}
-		if (this.isUnlisted) {
-			const [vimeoId, privateHash] = videoId.split('/');
-			this.hash = privateHash;
-			return vimeoId;
-		}
-		return videoId;
-	}
-
-	get loop() {
-		return this.hasAttribute('loop');
-	}
-
-	/**
-	 * Set the video ID
-	 * @param {string} id
-	 */
-	set videoId(id) {
-		this.setAttribute('videoid', id);
-	}
-
-	get videoPlay() {
-		return this.getAttribute('videoplay') || 'Play';
-	}
-
-	/**
-	 * Alters the "Play" button text
-	 * @param {string} name
-	 */
-	set videoPlay(name) {
-		this.setAttribute('videoplay', name);
-	}
-
-	/**
-	 * Get the title of the video
-	 * @returns {string} the video title or "Video"
-	 */
-	get videoTitle() {
-		return this.getAttribute('videotitle') || 'Video';
-	}
-
-	/**
-	 * Set the title of the video
-	 *
-	 * @param {string} title the title of the video
-	 */
-	set videoTitle(title) {
-		this.setAttribute('videotitle', title);
-	}
-
-	/**
-	 * Get the start time of the video
-	 * @returns {string} the start time or "0s"
-	 */
-	get videoStartAt() {
-		return this.getAttribute('start');
-	}
-
-	/**
-	 * Set the start time of the video
-	 * @param {string} time the start time of the video
-	 */
-	set videoStartAt(time) {
-		this.setAttribute('start', time);
-	}
-
-	/**
-	 * Get the autoLoad property
-	 * @returns {boolean} the autoLoad property
-	 */
-	get autoLoad() {
-		return this.hasAttribute('autoload');
-	}
-
-	/**
-	 * Alters the autoLoad property
-	 *
-	 * @param {boolean} value
-	 */
-	set autoLoad(value) {
-		if (value) {
-			this.setAttribute('autoload', '');
-		} else {
-			this.removeAttribute('autoload');
-		}
-	}
-
-	/**
-	 * Get the autoPlay property
-	 * @returns {boolean} the autoPlay property
-	 */
-	get autoPlay() {
-		return this.hasAttribute('autoplay');
-	}
-
-	/**
-	 * Alters the autoPlay property
-	 *
-	 * @param {boolean} value
-	 */
-	set autoPlay(value) {
-		if (value) {
-			this.setAttribute('autoplay', 'autoplay');
-		} else {
-			this.removeAttribute('autoplay');
-		}
 	}
 
 	/**
@@ -217,121 +31,53 @@ class LiteVimeo extends HTMLElement {
 		this.domRefPlayButton = this.shadowRoot.querySelector('.lvo-playbtn');
 	}
 
-	/** Add CSS to ShadowDOM Element
-	 * @returns {string} the CSS
-	 */
-	addStyles() {
-		const styles = ` <style>
-        :host {
-          contain: content;
-          display: block;
-          position: relative;
-          width: 100%;
-          aspect-ratio:16 / 9;
-        }
-
-        #frame, #fallbackPlaceholder, iframe, #custom-placeholder {
-          position: absolute;
-          height:100%;
-          width:100%;
-        }
-
-        #frame {
-          cursor: pointer;
-        }
-		#fallbackPlaceholder, #custom-placeholder {
-			object-fit: cover;
+	connectedCallback() {
+		if (!this.shadowRoot) {
+			this.shadowRoot = this.attachShadow({ mode: 'open' });
 		}
+		this.addEventListener('pointerover', LiteVimeo.warmConnections, {
+			once: true,
+		});
 
-	  #frame::before {
-		content: '';
-		display: block;
-		position: absolute;
-		top: 0;
-		${
-			this.hasCustomPlaceholder
-				? ''
-				: 'background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAADGCAYAAAAT+OqFAAAAdklEQVQoz42QQQ7AIAgEF/T/D+kbq/RWAlnQyyazA4aoAB4FsBSA/bFjuF1EOL7VbrIrBuusmrt4ZZORfb6ehbWdnRHEIiITaEUKa5EJqUakRSaEYBJSCY2dEstQY7AuxahwXFrvZmWl2rh4JZ07z9dLtesfNj5q0FU3A5ObbwAAAABJRU5ErkJggg==);'
-		}
-		background-position: top;
-		height: 60px;
-		padding-bottom: 50px;
-		width: 100%;
-		transition: all 0.2s cubic-bezier(0, 0, 0.2, 1);
-		z-index: 1;
-	  }
-	  /* play button */
-	  .lvo-playbtn {
-		width: 70px;
-		height: 46px;
-		background-color: #212121;
-		z-index: 1;
-		opacity: 0.8;
-		border-radius: 10%;
-		transition: all 0.2s cubic-bezier(0, 0, 0.2, 1);
-		border: 0;
-	  }
-	  #frame:hover .lvo-playbtn {
-		background-color: rgb(98, 175, 237);
-		opacity: 1;
-		cursor: pointer;
-	  }
-	  /* play button triangle */
-	  .lvo-playbtn:before {
-		content: '';
-		border-style: solid;
-		border-width: 11px 0 11px 19px;
-		border-color: transparent transparent transparent #fff;
-	  }
-	  .lvo-playbtn,
-	  .lvo-playbtn:before {
-		position: absolute;
-		top: 50%;
-		left: 50%;
-		transform: translate3d(-50%, -50%, 0);
-	  }
-
-	  /* Post-click styles */
-	  .lvo-activated {
-		cursor: unset;
-	  }
-
-	  #frame.lvo-activated::before,
-	  .lvo-activated .lvo-playbtn,
-	  .lvo-activated picture {
-		display: none;
-	  }
-	}
-    </style>`;
-		return styles;
+		this.addEventListener('click', () => this.addIframe());
 	}
 
 	/**
-	 * Adds the video placeholder image to the shadowDOM player, and conditionally renders the play button if a custom placeholder is provided
-	 * @returns {string} the HTML
+	 * Inject the iframe into the component body
 	 */
-	addPictureElement() {
-		const picture = `<div id="frame"><picture>
-        ${
-			this.hasCustomPlaceholder
-				? `<img id="custom-placeholder"
-				src="${this.customPlaceholder}"
-				decoding="async"
-				loading="lazy" />`
-				: `
-		<source id="webpPlaceholder" type="image/webp">
-		<source id="jpegPlaceholder" type="image/jpeg">
-		<img id="fallbackPlaceholder"
-			 referrerpolicy="origin"
-			 width="1100"
-			 height="619"
-			 decoding="async"
-			 loading="lazy" />
-	  `
+	addIframe() {
+		if (!this.iframeLoaded) {
+			const queryParams = this.getIFrameParams();
+			const url = `/video/${this.videoId}${
+				this.isUnlisted
+					? `?h=${this.hash}&${queryParams}`
+					: `?${queryParams}`
+			}`;
+
+			const srcUrl = new URL(url, 'https://player.vimeo.com/');
+
+			const iframeHTML = `
+			<iframe frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope" allowfullscreen autoplay="true" ${
+				this.autoPlay ? `muted="true"` : ''
+			} src="${srcUrl}"></iframe>`;
+			this.domRefFrame.insertAdjacentHTML('beforeend', iframeHTML);
+			this.domRefFrame.classList.add('lvo-activated');
+			this.iframeLoaded = true;
 		}
-		</picture><button class="lvo-playbtn"></button>
-      </div>`;
-		return picture;
+	}
+
+	/**
+	 * Gets the Vimeo iFrame src parameters
+	 *
+	 * @returns {string} the iframe parameters
+	 */
+	getIFrameParams() {
+		let params = 'hd=1&autohide=1&autoplay=1';
+		params += this.loop ? '&loop=1' : '';
+		params += this.enableTracking ? '' : '&dnt=1';
+		params += this.autoPlay ? '&muted=1' : '';
+		params += this.videoStartAt ? `&#t=${this.videoStartAt}` : '';
+		return params;
 	}
 
 	/**
@@ -354,6 +100,7 @@ class LiteVimeo extends HTMLElement {
 
 	/**
 	 * Lifecycle method that we use to listen for attribute changes to period
+	 *
 	 * @param {string} name
 	 * @param {unknown} oldVal
 	 * @param {unknown} newVal
@@ -378,40 +125,33 @@ class LiteVimeo extends HTMLElement {
 	}
 
 	/**
-	 * Inject the iframe into the component body
+	 * Setup the Intersection Observer to load the iframe when scrolled into view
+	 *
+	 * @returns {void}
 	 */
-	addIframe() {
-		if (!this.iframeLoaded) {
-			const queryParams = this.getIFrameParams();
-			const url =
-				`/video/${this.videoId}` +
-				(this.isUnlisted
-					? `?h=${this.hash}&${queryParams}`
-					: `?${queryParams}`) +
-				`enablejsapi=1`;
+	initIntersectionObserver() {
+		if (
+			'IntersectionObserver' in window &&
+			'IntersectionObserverEntry' in window
+		) {
+			const options = {
+				root: null,
+				rootMargin: '0px',
+				threshold: 0,
+			};
 
-			const srcUrl = new URL(url, 'https://player.vimeo.com/');
+			const observer = new IntersectionObserver((entries, observer) => {
+				entries.forEach((entry) => {
+					if (entry.isIntersecting && !this.iframeLoaded) {
+						LiteVimeo.warmConnections();
+						this.addIframe();
+						observer.unobserve(this);
+					}
+				});
+			}, options);
 
-			const iframeHTML = `
-		<iframe frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope" allowfullscreen autoplay="true" ${
-			this.autoPlay ? `muted="true"` : ''
-		} src="${srcUrl}"></iframe>`;
-			this.domRefFrame.insertAdjacentHTML('beforeend', iframeHTML);
-			this.domRefFrame.classList.add('lvo-activated');
-			this.iframeLoaded = true;
+			observer.observe(this);
 		}
-	}
-
-	/**
-	 * Gets the Vimeo iFrame src parameters
-	 * @returns {string} the iframe parameters
-	 */
-	getIFrameParams() {
-		return `hd=1&autohide=1&autoplay=1${this.loop ? '&loop=1' : ''}${
-			this.enableTracking ? '' : '&dnt=1'
-		}${this.autoPlay ? '&muted=1' : ''}${
-			this.videoStartAt ? `&#t=${this.videoStartAt}` : ''
-		}`;
 	}
 
 	/**
@@ -450,36 +190,6 @@ class LiteVimeo extends HTMLElement {
 			`${this.videoPlay}: ${this.videoTitle}`
 		);
 	};
-
-	/**
-	 * Setup the Intersection Observer to load the iframe when scrolled into view
-	 *
-	 * @returns {void}
-	 */
-	initIntersectionObserver() {
-		if (
-			'IntersectionObserver' in window &&
-			'IntersectionObserverEntry' in window
-		) {
-			const options = {
-				root: null,
-				rootMargin: '0px',
-				threshold: 0,
-			};
-
-			const observer = new IntersectionObserver((entries, observer) => {
-				entries.forEach((entry) => {
-					if (entry.isIntersecting && !this.iframeLoaded) {
-						LiteVimeo.warmConnections();
-						this.addIframe();
-						observer.unobserve(this);
-					}
-				});
-			}, options);
-
-			observer.observe(this);
-		}
-	}
 
 	/**
 	 * Add a <link rel={preload | preconnect} ...> to the head
