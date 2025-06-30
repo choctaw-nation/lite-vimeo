@@ -1,7 +1,7 @@
 name: Build & Deploy
 on:
     push:
-        branches: cno-main
+        branches: ['cno-main']
 
 jobs:
     build-and-deploy:

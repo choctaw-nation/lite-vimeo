@@ -50,7 +50,7 @@ flexibility.
 | `autoload`          | Use Intersection Observer to load iframe when scrolled into view            | `false`  |
 | `autoplay`          | Video attempts to play automatically if auto-load set and browser allows it | `false`  |
 | `start`             | Set the point at which the video should start, in seconds                   | `0`      |
-| `unlisted`          | An attribute flag whose existence declares the videoid as unlisted          |          |
+| `unlisted`          | An attribute flag whose existence declares the videoid as unlisted          | `false`  |
 | `customPlaceholder` | A valid url to load a custom placeholder image                              | `string` |
 | `enabletracking`    | An opt-in attribute flag to allow Vimeo's tracking                          |
 | `loop`              | If exists, loop the video                                                   |
@@ -58,6 +58,14 @@ flexibility.
 ---
 
 ## Changelog
+
+### v1.3.0
+
+-   Updated: `unlisted` now accepts "true/false" strings as passed parameter. The mere presence of the attribute to determine truthy-ness may be deprecated in the future.
+-   Fixed:
+    -   `lite-vimeo` now checks if a similarly named component has already been registered.
+    -   Misc. bug fixes
+-   Chore: updated packages
 
 ### v1.2.0
 
