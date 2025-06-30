@@ -1,5 +1,5 @@
 /**
- * Handles the properties for the lite-vimeo component
+ * Handles the getter/setter methods and properties for the lite-vimeo component
  */
 export default class BaseElement extends HTMLElement {
 	/**
@@ -11,6 +11,7 @@ export default class BaseElement extends HTMLElement {
 
 	/**
 	 * Whether the iframe has been loaded
+	 *
 	 * @type {boolean}
 	 */
 	iframeLoaded = false;
@@ -24,12 +25,14 @@ export default class BaseElement extends HTMLElement {
 
 	/**
 	 * The `img` elements of the shadowDOM that will be used as placeholders
-	 * @type {{fallback: HTMLImageElement, webp: HTMLSourceElement, jpeg: HTMLSourceElement}}
+	 *
+	 * @type {{ fallback: HTMLImageElement; webp: HTMLSourceElement; jpeg: HTMLSourceElement; }}
 	 */
 	domRefImg;
 
 	/**
 	 * The play button element
+	 *
 	 * @type {HTMLButtonElement}
 	 */
 	domRefPlayButton;
@@ -37,7 +40,7 @@ export default class BaseElement extends HTMLElement {
 	/**
 	 * The private hash for unlisted videos
 	 *
-	 * @type {string|undefined}
+	 * @type {string | undefined}
 	 */
 	hash = undefined;
 
@@ -57,7 +60,14 @@ export default class BaseElement extends HTMLElement {
 	}
 
 	get isUnlisted() {
-		return this.hasAttribute('unlisted');
+		if (!this.hasAttribute('unlisted')) {
+			return false;
+		} else {
+			return (
+				this.getAttribute('unlisted') === 'true' ||
+				this.getAttribute('unlisted') === ''
+			);
+		}
 	}
 
 	get enableTracking() {
@@ -68,6 +78,9 @@ export default class BaseElement extends HTMLElement {
 		return this.hasAttribute('customplaceholder');
 	}
 
+	/**
+	 * Returns the custom placeholder URL if set, otherwise an empty string
+	 */
 	get customPlaceholder() {
 		return this.getAttribute('customplaceholder') || '';
 	}
@@ -91,7 +104,8 @@ export default class BaseElement extends HTMLElement {
 
 	/**
 	 * Set the video ID
-	 * @param {string} id
+	 *
+	 * @param {string} id the video ID or unlisted video ID in the format "123456789/abcdefg"
 	 */
 	set videoId(id) {
 		this.setAttribute('videoid', id);
@@ -103,7 +117,8 @@ export default class BaseElement extends HTMLElement {
 
 	/**
 	 * Alters the "Play" button text
-	 * @param {string} name
+	 *
+	 * @param {string} name the text to set for the "Play" button
 	 */
 	set videoPlay(name) {
 		this.setAttribute('videoplay', name);
@@ -111,7 +126,8 @@ export default class BaseElement extends HTMLElement {
 
 	/**
 	 * Get the title of the video
-	 * @returns {string} the video title or "Video"
+	 *
+	 * @returns {string} the title of the video or "Video" if not set
 	 */
 	get videoTitle() {
 		return this.getAttribute('videotitle') || 'Video';
@@ -131,12 +147,12 @@ export default class BaseElement extends HTMLElement {
 	 * @returns {string} the start time or "0s"
 	 */
 	get videoStartAt() {
-		return this.getAttribute('start');
+		return this.getAttribute('start') || '0s';
 	}
 
 	/**
 	 * Set the start time of the video
-	 * @param {string} time the start time of the video
+	 * @param {string} time the start time in seconds or a time string like "1m30s"
 	 */
 	set videoStartAt(time) {
 		this.setAttribute('start', time);
@@ -144,7 +160,8 @@ export default class BaseElement extends HTMLElement {
 
 	/**
 	 * Get the autoLoad property
-	 * @returns {boolean} the autoLoad property
+	 *
+	 * @return {boolean} true if the video should be auto-loaded, false otherwise
 	 */
 	get autoLoad() {
 		return this.hasAttribute('autoload');
@@ -153,7 +170,7 @@ export default class BaseElement extends HTMLElement {
 	/**
 	 * Alters the autoLoad property
 	 *
-	 * @param {boolean} value
+	 * @param {boolean} value true to enable auto-loading, false to disable
 	 */
 	set autoLoad(value) {
 		if (value) {
@@ -166,7 +183,7 @@ export default class BaseElement extends HTMLElement {
 	/**
 	 * Get the autoPlay property
 	 *
-	 * @returns {boolean} the autoPlay property
+	 * @return {boolean} true if the video should autoplay, false otherwise
 	 */
 	get autoPlay() {
 		return this.hasAttribute('autoplay');
@@ -175,7 +192,7 @@ export default class BaseElement extends HTMLElement {
 	/**
 	 * Alters the autoPlay property
 	 *
-	 * @param {boolean} value
+	 * @param {boolean} value true to enable autoplay, false to disable
 	 */
 	set autoPlay(value) {
 		if (value) {

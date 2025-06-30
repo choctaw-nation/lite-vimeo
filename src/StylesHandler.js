@@ -4,7 +4,7 @@ import BaseElement from './BaseElement';
  * Handles the styles for the lite-vimeo component
  *
  */
-export default class LVStylesHandler extends BaseElement {
+export default class StylesHandler extends BaseElement {
 	constructor() {
 		super();
 	}
