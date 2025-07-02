@@ -59,6 +59,10 @@ flexibility.
 
 ## Changelog
 
+### v1.3.1
+
+-   Misc bug fixes
+
 ### v1.3.0
 
 -   Updated: `unlisted` now accepts "true/false" strings as passed parameter. The mere presence of the attribute to determine truthy-ness may be deprecated in the future.

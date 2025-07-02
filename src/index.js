@@ -4,16 +4,11 @@ import StylesHandler from './StylesHandler';
  * Final Class
  * Sets up the component.
  *
- * @link @link https://github.com/slightlyoff/lite-vimeo
+ * @link https://github.com/slightlyoff/lite-vimeo
  */
 class LiteVimeo extends StylesHandler {
 	constructor() {
 		super();
-		if (!this.shadowRoot) {
-			this.attachShadow({ mode: 'open' });
-		} else {
-			this.shadowRoot.innerHTML = '';
-		}
 		this.setupDom();
 	}
 
@@ -21,6 +16,11 @@ class LiteVimeo extends StylesHandler {
 	 * Define our shadowDOM for the component
 	 */
 	setupDom() {
+		if (!this.shadowRoot) {
+			this.shadowRoot = this.attachShadow({ mode: 'open' });
+		} else {
+			this.shadowRoot.innerHTML = '';
+		}
 		this.shadowRoot.innerHTML = this.addStyles() + this.addPictureElement();
 		this.domRefFrame = this.shadowRoot.querySelector('#frame');
 		this.domRefImg = {
@@ -33,7 +33,7 @@ class LiteVimeo extends StylesHandler {
 
 	connectedCallback() {
 		if (!this.shadowRoot) {
-			this.attachShadow({ mode: 'open' });
+			this.shadowRoot = this.attachShadow({ mode: 'open' });
 		}
 		this.addEventListener('pointerover', LiteVimeo.warmConnections, {
 			once: true,
@@ -69,7 +69,7 @@ class LiteVimeo extends StylesHandler {
 	/**
 	 * Gets the Vimeo iFrame src parameters
 	 *
-	 * @returns {string} The parameters for the Vimeo iFrame
+	 * @returns {string} the iframe parameters
 	 */
 	getIFrameParams() {
 		let params = 'hd=1&autohide=1&autoplay=1';
@@ -101,9 +101,11 @@ class LiteVimeo extends StylesHandler {
 	/**
 	 * Lifecycle method that we use to listen for attribute changes to period
 	 *
-	 * @param {string} name The name of the attribute that changed
-	 * @param {unknown} oldVal The old value of the attribute
-	 * @param {unknown} newVal The new value of the attribute
+	 * @param {string} name
+	 * @param {unknown} oldVal
+	 * @param {unknown} newVal
+	 *
+	 * @returns {void}
 	 */
 	attributeChangedCallback(name, oldVal, newVal) {
 		switch (name) {
@@ -124,6 +126,8 @@ class LiteVimeo extends StylesHandler {
 
 	/**
 	 * Setup the Intersection Observer to load the iframe when scrolled into view
+	 *
+	 * @returns {void}
 	 */
 	initIntersectionObserver() {
 		if (
@@ -152,6 +156,8 @@ class LiteVimeo extends StylesHandler {
 
 	/**
 	 * Setup the placeholder image for the component
+	 *
+	 * @returns {Promise<any>|void}
 	 */
 	initImagePlaceholder = async () => {
 		if (this.isUnlisted) {
@@ -187,16 +193,13 @@ class LiteVimeo extends StylesHandler {
 
 	/**
 	 * Add a <link rel={preload | preconnect} ...> to the head
+	 * @param {string} kind the kind of link to add
+	 * @param {string} url the source URL
+	 * @param {?string} as the "as" attribute
 	 *
-	 * @param {('preload' | 'preconnect')} kind The type of prefetch to add
-	 * @param {string} url The URL to prefetch
-	 * @param {string | null} [as=null] The `as` attribute for
+	 * @returns {void}
 	 */
 	static addPrefetch(kind, url, as = null) {
-		const kindIsValid = 'preload' === kind || 'preconnect' === kind;
-		if (!kindIsValid) {
-			return;
-		}
 		const linkElem = document.createElement('link');
 		linkElem.rel = kind;
 		linkElem.href = url;
@@ -216,6 +219,8 @@ class LiteVimeo extends StylesHandler {
 	 * Maybe `<link rel=preload as=document>` would work, but it's unsupported:
 	 * http://crbug.com/593267 But TBH, I don't think it'll happen soon with Site
 	 * Isolation and split caches adding serious complexity.
+	 *
+	 * @returns {void}
 	 */
 	static warmConnections() {
 		if (LiteVimeo.preconnected) return;
@@ -233,6 +238,7 @@ class LiteVimeo extends StylesHandler {
 		LiteVimeo.preconnected = true;
 	}
 }
+
 try {
 	if (!customElements.get('lite-vimeo')) {
 		customElements.define('lite-vimeo', LiteVimeo);
