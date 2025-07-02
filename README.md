@@ -42,18 +42,18 @@ import '@choctawnationofoklahoma/lite-vimeo';
 The web component allows certain attributes to be give a little additional
 flexibility.
 
-| Name                | Description                                                                 | Default  |
-| ------------------- | --------------------------------------------------------------------------- | -------- |
-| `videoid`\*         | The Vimeo videoid (required)                                                | ``       |
-| `videotitle`        | The title of the video                                                      | `Video`  |
-| `videoplay`         | The title of the play button (for translation)                              | `Play`   |
-| `autoload`          | Use Intersection Observer to load iframe when scrolled into view            | `false`  |
-| `autoplay`          | Video attempts to play automatically if auto-load set and browser allows it | `false`  |
-| `start`             | Set the point at which the video should start, in seconds                   | `0`      |
-| `unlisted`          | An attribute flag whose existence declares the videoid as unlisted          | `false`  |
-| `customPlaceholder` | A valid url to load a custom placeholder image                              | `string` |
-| `enabletracking`    | An opt-in attribute flag to allow Vimeo's tracking                          |
-| `loop`              | If exists, loop the video                                                   |
+| Name                | Description                                                                                 | Default  |
+| ------------------- | ------------------------------------------------------------------------------------------- | -------- |
+| `videoid`\*         | The Vimeo videoid (required)                                                                | ``       |
+| `videotitle`        | The title of the video                                                                      | `Video`  |
+| `videoplay`         | The title of the play button (for translation)                                              | `Play`   |
+| `autoload`          | Use Intersection Observer to load iframe when scrolled into view                            | `false`  |
+| `autoplay`          | Video attempts to play automatically if auto-load set and browser allows it                 | `false`  |
+| `start`             | Set the point at which the video should start, in seconds                                   | `0`      |
+| `unlisted`          | Allows the component to handle unlisted videos. If `true`, a custom placeholder is required | `false`  |
+| `customPlaceholder` | A valid url to load a custom placeholder image                                              | `string` |
+| `enabletracking`    | An opt-in attribute flag to allow Vimeo's tracking                                          |
+| `loop`              | If exists, loop the video                                                                   |
 
 ---
 
