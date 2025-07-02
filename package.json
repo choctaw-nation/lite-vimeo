@@ -1,34 +1,35 @@
 {
-	"name": "@choctawnationofoklahoma/lite-vimeo",
-	"description": "A web component that loads Vimeo embed iframes faster. Extends Alex Russell (@slightlyoff)'s version to allow unlisted videos.",
-	"version": "1.3.0",
-	"author": "KJ Roelke",
-	"type": "module",
-	"prettier": "@wordpress/prettier-config",
-	"repository": {
-		"type": "git",
-		"url": "git@github.com:choctaw-nation/lite-vimeo.git"
-	},
-	"license": "MIT",
-	"main": "dist/lite-vimeo.js",
-	"targets": {
-		"main": {
-			"source": "src/index.js",
-			"context": "browser",
-			"outputFormat": "esmodule",
-			"isLibrary": true,
-			"sourceMap": false
-		}
-	},
-	"scripts": {
-		"build": "parcel build"
-	},
-	"keywords": [
-		"web components",
-		"vimeo"
-	],
-	"devDependencies": {
-		"@wordpress/prettier-config": "^4.26.0",
-		"parcel": "^2.15.4"
-	}
+    "name": "@choctawnationofoklahoma/lite-vimeo",
+    "description": "A web component that loads Vimeo embed iframes faster. Extends Alex Russell (@slightlyoff)'s version to allow unlisted videos.",
+    "version": "1.3.1",
+    "author": "KJ Roelke",
+    "type": "module",
+    "prettier": "@wordpress/prettier-config",
+    "repository": {
+        "type": "git",
+        "url": "git@github.com:choctaw-nation/lite-vimeo.git"
+    },
+    "license": "MIT",
+    "main": "dist/lite-vimeo.js",
+    "targets": {
+        "main": {
+            "source": "src/index.js",
+            "context": "browser",
+            "outputFormat": "esmodule",
+            "isLibrary": true,
+            "sourceMap": false
+        }
+    },
+    "scripts": {
+        "build": "parcel build",
+        "start": "parcel"
+    },
+    "keywords": [
+        "web components",
+        "vimeo"
+    ],
+    "devDependencies": {
+        "@wordpress/prettier-config": "^4.26.0",
+        "parcel": "^2.15.4"
+    }
 }
